@@ -11,7 +11,9 @@ const SPOTIFY_SCOPES = [
   "user-read-private",
   "user-read-email",
   "playlist-modify-public",
-  "playlist-modify-private"
+  "playlist-modify-private",
+  "playlist-read-collaborative",
+  "playlist-read-private"
 ];
 
 let redirect_uri = encodeURI("http://localhost:8888/callback");

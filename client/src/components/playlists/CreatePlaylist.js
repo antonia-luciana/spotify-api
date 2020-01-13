@@ -1,13 +1,12 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Field, reduxForm } from "redux-form";
-import { formValueSelector } from 'redux-form';
+import SelectDropdown from "../SelectDropdown";
 
 class CreatePlaylist extends React.Component {
   state = {
     access_token: null,
     name: "",
-    public: false
+    public: false,
+    collaborative: false
   };
 
   componentDidMount() {
@@ -58,11 +57,8 @@ class CreatePlaylist extends React.Component {
         <input name="name" onChange={this.onChange}/>
       </div>
       <div>
-        <label>Public: </label>
-        <select name="public" value={this.state.public} onChange={this.onChange}>
-          <option value={true}>True</option>
-          <option value={false}>False</option>
-        </select>
+        <SelectDropdown name="public" label={"Public"} value={this.state.public} onChange={this.onChange} options={["true",  "false"]}/>
+        <SelectDropdown name="collaborative" label={"Collaborative"} value={this.state.collaborative} onChange={this.onChange} options={["true",  "false"]}/>
       </div>
       <button className="">Submit</button>
     </form>)
