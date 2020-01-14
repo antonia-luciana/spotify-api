@@ -1,14 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Link, Redirect } from "react-router-dom";
-import spotify from "../api/spotify";
-import Login from "./Login";
-import { client_id, client_secret } from "../clientData";
-import axios from "axios";
 import CreatePlaylist from "../containers/CreatePlaylist";
-
-const P = () => {
-  return <div>P</div>;
-};
+import ShowPlaylists from "../containers/ShowPlaylists";
 
 class App extends React.Component {
   render() {
@@ -16,7 +9,7 @@ class App extends React.Component {
       <div>
         <BrowserRouter>
           <div>
-            <Route path="/" exact component={P} />
+            <Route path="/" exact component={ShowPlaylists} />
             <Route path="/create" exact component={CreatePlaylist} />
           </div>
         </BrowserRouter>

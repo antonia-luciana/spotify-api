@@ -1,4 +1,3 @@
-import _ from "lodash";
 import {
   GET_USER_ID_ERROR
 } from "../actions/types";

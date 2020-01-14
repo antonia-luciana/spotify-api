@@ -10,18 +10,12 @@ class CreatePlaylist extends React.Component {
   };
 
   componentDidMount() {
-    console.log("Mount");
-		const access_token = new URL(window.location.href).searchParams.get(
-      "access_token"
-    );
-    this.setState({
-      access_token
-    })
-    this.getUserId(access_token);
+    console.log("mount ***", this.props);
+    this.getUserId();
   }
 
-  getUserId = access_token => {
-    this.props.getUserId(access_token);
+  getUserId = () => {
+    this.props.getUserId();
   };
 
   onChange = (event) => {
