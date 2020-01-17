@@ -5,7 +5,7 @@ import { getUserId, createPlaylist } from "../actions";
 const mapStateToProps = (state, ownProps) => {
   return { 
     user_id: state.playlists.user_id,
-    playlist: state.playlists.id,
+    created_playlist: state.playlists,
     playlists: state.playlists,
     access_token: state.playlists.access_token
    };
