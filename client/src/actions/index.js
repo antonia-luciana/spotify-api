@@ -1,20 +1,21 @@
+import history from "../history";
 import {
   GET_USER_ID,
   CREATE_PLAYLIST,
   GET_USER_ID_ERROR,
   FETCH_PLAYLIST,
-  FETCH_PLAYLIST_ERROR,
   FETCH_PLAYLISTS,
   FETCH_PLAYLISTS_ERROR,
   FETCH_PLAYLIST_TRACKS,
   SET_ACCESS_TOKEN,
   EDIT_PLAYLIST,
-  DELETE_PLAYLIST
+  DELETE_PLAYLIST,
+  SEARCH
 } from "./types";
 import axios from "axios";
 import { store } from "../index";
-axios.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded";
+axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+
 
 export const setAccessToken = access_token => {
   return {
@@ -76,14 +77,13 @@ export const fetchPlaylist = async (dispatch, playlist_id) => {
         }
       }
     );
-    console.log(response);
     if (response.status === 200) {
       dispatch({ type: FETCH_PLAYLIST, payload: response.data });
     } else {
       dispatch({ type: FETCH_PLAYLIST, payload: null });
     }
   } catch (error) {
-    dispatch({ type: FETCH_PLAYLIST_ERROR, error: error });
+
   }
 };
 
@@ -99,18 +99,16 @@ export const fetchPlaylistTracks = async (dispatch, playlist_id) => {
         }
       }
     );
-    console.log(response);
+
     if (response.status === 200) {
       dispatch({ type: FETCH_PLAYLIST_TRACKS, payload: response.data });
     } 
   } catch (error) {
-    //dispatch({ type: FETCH_PLAYLIST_ERROR, error: error });
+    
   }
 };
 
 export const createPlaylist = async (dispatch, values) => {
-  console.log("date ajunse in actiune", values);
-  console.log("store", store.getState());
   const access_token = store.getState().playlists.access_token;
   const user_id = store.getState().playlists.user_id;
   const { name, collaborativ, description } = values;
@@ -130,11 +128,11 @@ export const createPlaylist = async (dispatch, values) => {
     }
   };
   const response = await axios(config);
-  console.log("action", response.data);
   dispatch({
     type: CREATE_PLAYLIST,
     payload: response.data
   });
+  history.push("/");
 };
 
 
@@ -143,7 +141,6 @@ export const editPlaylist = async (dispatch, values) => {
   try {
     const access_token = store.getState().playlists.access_token;
     const { name, collaborativ, description, playlist_id} = values;
-    console.log("acces token in action", access_token, playlist_id);
     const data = {
       name: name,
       public: values.public,
@@ -163,14 +160,17 @@ export const editPlaylist = async (dispatch, values) => {
       }
     };
     const response = await axios(config);
-    console.log(response);
     if (response.status === 200) {
       dispatch({ type: EDIT_PLAYLIST, payload: response.data });
     } else {
       dispatch({ type: EDIT_PLAYLIST, payload: null });
     }
+    setTimeout(() => {
+      history.push("/");
+      
+    });
   } catch (error) {
-    //dispatch({ type: EDIT_PLAYLIST_ERROR, error: error });
+
   }
 };
 
@@ -178,7 +178,30 @@ export const editPlaylist = async (dispatch, values) => {
 export const deletePlaylist  = async (dispatch, playlist_id) => {
   try {
     const access_token = store.getState().playlists.access_token;
-    console.log("acces token in action", access_token, playlist_id);
+    var config = {
+      method: "DELETE",
+      url:  `https://api.spotify.com/v1/playlists/${playlist_id}/followers`,
+      headers: {
+        Authorization: "Bearer " + access_token
+      }
+    };
+    const response = await axios(config);
+    
+    if (response.status === 200) {
+      dispatch({ type: DELETE_PLAYLIST });
+    } else {
+      dispatch({ type: DELETE_PLAYLIST });
+    }
+    history.push("/");
+  } catch (error) {
+    
+  }
+};
+
+
+export const deleteTrackFromPlaylist  = async (dispatch, playlist_id) => {
+  try {
+    const access_token = store.getState().playlists.access_token;
     
     var config = {
       method: "DELETE",
@@ -188,14 +211,37 @@ export const deletePlaylist  = async (dispatch, playlist_id) => {
       }
     };
     const response = await axios(config);
-    console.log("RAspuns", response);
+    
     if (response.status === 200) {
       dispatch({ type: DELETE_PLAYLIST });
     } else {
       dispatch({ type: DELETE_PLAYLIST });
     }
+    history.push("/");
   } catch (error) {
-    //dispatch({ type: EDIT_PLAYLIST_ERROR, error: error });
+    
   }
 };
 
+export const search  = async (dispatch, searchTerm) => {
+  try {
+    const access_token = store.getState().playlists.access_token;
+    
+    let config = {
+      method: "GET",
+      url:  `https://api.spotify.com/v1/search?q=${searchTerm}&type=track`,
+      headers: {
+        Authorization: "Bearer " + access_token
+      }
+    };
+
+    const response = await axios(config);
+
+    if (response.status === 200) {
+      dispatch({ type: SEARCH, payload: response.data });
+    } 
+    history.push("/");
+  } catch (error) {
+    
+  }
+};

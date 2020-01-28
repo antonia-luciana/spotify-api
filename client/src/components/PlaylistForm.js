@@ -34,6 +34,8 @@ class PlaylistForm extends React.Component {
   render() {
     console.log("state in form", this.state);
     const { buttonLabel} = this.props;
+    console.log(this.props)
+ 
     const { name, description, collaborative} = this.state;
     return (
       <form onSubmit={this.onSubmit}>

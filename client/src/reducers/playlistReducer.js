@@ -7,7 +7,9 @@ import {
   FETCH_PLAYLISTS,
   SET_ACCESS_TOKEN,
   EDIT_PLAYLIST,
-  FETCH_PLAYLIST_TRACKS
+  FETCH_PLAYLIST_TRACKS,
+  DELETE_TRACK_FROM_PLAYLIST,
+  SEARCH
 } from "../actions/types";
 
 const initialState = {
@@ -34,6 +36,10 @@ export default (state = initialState, action) => {
       return { ...state, edited_playlist: action.payload };
     case DELETE_PLAYLIST:
       return _.omit(state, action.payload);
+    case DELETE_TRACK_FROM_PLAYLIST:
+      return _.omit(state, action.payload);
+    case SEARCH:
+      return {...state, search_result: action.payload}
     default:
       return state;
   }

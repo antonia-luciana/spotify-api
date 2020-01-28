@@ -2,11 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 class CreatePlaylist extends React.Component {
+
   componentDidMount() {
-    const access_token = new URL(window.location.href).searchParams.get(
+    let access_token = new URL(window.location.href).searchParams.get(
       "access_token"
     );
-    this.props.setAccessToken(access_token);
+
+    if (!access_token) {
+      access_token = window.localStorage.getItem("access_token");
+    } else {
+      this.props.setAccessToken(access_token);
+    }
+    
     this.props.getUserId();
     this.props.fetchPlaylists(access_token);
   }
@@ -24,7 +31,6 @@ class CreatePlaylist extends React.Component {
   };
 
   render() {
-    console.log("render props", this.props, this.state);
     if (!this.props.playlists) {
       return null;
     }
@@ -54,7 +60,7 @@ class CreatePlaylist extends React.Component {
         {playlists}
         <div>
           <Link className="ui button primary" to="/create">
-            Create Playlisto
+            Create Playlist
           </Link>
         </div>
       </div>

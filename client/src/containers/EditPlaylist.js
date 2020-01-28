@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchPlaylist, editPlaylist } from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
+  console.log(ownProps)
   return { 
     playlist: state.playlists.playlist
    };

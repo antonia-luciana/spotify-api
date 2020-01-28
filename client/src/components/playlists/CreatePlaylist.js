@@ -9,7 +9,6 @@ class CreatePlaylist extends React.Component {
       collaborative: false,
       description: ""
     };
-    console.log("render state", state)
     return (
       <PlaylistForm buttonLabel="Create Playlist" onSubmit={this.props.createPlaylist} stateValues={state}/>
    )
