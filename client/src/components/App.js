@@ -11,10 +11,8 @@ import history from "../history";
 
 class App extends React.Component {
   renderMainPage() {
-    console.log("x");
     return (
       <div>
-        asdfdsgf
         <SearchBar />
         <ShowPlaylists />
       </div>
@@ -27,7 +25,7 @@ class App extends React.Component {
         <Router history={history}>
           <div>
             <Switch>
-              <Route exact path="/" component={() => this.renderMainPage()} />
+              <Route exact path="/" component={ShowPlaylists} />
               <Route exact path="/create" component={CreatePlaylist} />
               <Route
                 exact

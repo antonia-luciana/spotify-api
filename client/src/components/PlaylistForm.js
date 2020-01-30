@@ -1,11 +1,11 @@
 import React from "react";
 import Input from "./Input";
 import SelectDropdown from "./SelectDropdown";
+import Button from "../components/Button";
 
 class PlaylistForm extends React.Component {
   constructor(props) {
     super(props);
-    console.log("props in form", this.props, props);
 		this.state = this.props.stateValues;
 	}
 
@@ -32,9 +32,7 @@ class PlaylistForm extends React.Component {
   };
 
   render() {
-    console.log("state in form", this.state);
     const { buttonLabel} = this.props;
-    console.log(this.props)
  
     const { name, description, collaborative} = this.state;
     return (
@@ -52,17 +50,17 @@ class PlaylistForm extends React.Component {
             label={"Public"}
             value={this.state.public}
             onChange={this.onChange}
-            options={["true", "false"]}
+            options={[{value: "true"}, {value: "false"}]}
           />
           <SelectDropdown
             name="collaborative"
             label={"Collaborative"}
             value={collaborative}
             onChange={this.onChange}
-            options={["true", "false"]}
+            options={[{value: "true"}, {value: "false"}]}
           />
         </div>
-        <button className="">{buttonLabel}</button>
+        <Button label={buttonLabel}/>
       </form>
     );
   }

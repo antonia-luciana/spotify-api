@@ -1,5 +1,6 @@
 import _ from "lodash";
 import {
+  ADD_TRACK_TO_PLAYLIST,
   CREATE_PLAYLIST,
   DELETE_PLAYLIST,
   GET_USER_ID,
@@ -20,6 +21,8 @@ const initialState = {
 export default (state = initialState, action) => {
   console.log("reducer", action.type);
   switch (action.type) {
+    case ADD_TRACK_TO_PLAYLIST:
+      return _.omit(state, action.payload);
     case GET_USER_ID:
       return { ...state, user_id: action.payload };
     case SET_ACCESS_TOKEN:

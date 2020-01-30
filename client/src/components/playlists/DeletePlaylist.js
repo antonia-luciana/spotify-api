@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "../Modal";
 import history from "../../history";
 import { Link } from "react-router-dom";
+import Button from "../Button";
 
 class DeletePlaylist extends React.Component {
   componentDidMount() {
@@ -12,15 +13,13 @@ class DeletePlaylist extends React.Component {
     const { id } = this.props.match.params;
     return (
       <React.Fragment>
-        <button
+        <Button
           onClick={() => {
-            console.log(id)
-            this.props.deletePlaylist(id);
+            return this.props.deletePlaylist(id);
           }}
+          label="Unfollow"
           className="ui button negative"
-        >
-          Delete
-        </button>
+        />
         <Link to="/" className="ui button">
           Cancel
         </Link>
@@ -30,15 +29,15 @@ class DeletePlaylist extends React.Component {
 
   renderContent() {
     if (!this.props.playlist) {
-      return "Are you sure you want to delete this playlist?";
+      return "Are you sure you want to follow this playlist?";
     }
-    return `Are you sure you want to delete ${this.props.playlist.name}?`;
+    return `Are you sure you want to unfollow ${this.props.playlist.name}?`;
   }
 
   render() {
     return (
       <Modal
-        title="Delete Playlist"
+        title="Unfollow Playlist"
         content={this.renderContent()}
         actions={this.renderActions()}
         onDismiss={() => history.push("/")}

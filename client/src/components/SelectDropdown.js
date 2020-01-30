@@ -2,10 +2,14 @@ import React from "react";
 
 class SelectDropdown extends React.Component {
   render() {
-    const options = this.props.options.map((option, index) => {
+    let options = this.props.options.map((option, index) => {
+      let { label, value } = option;
+      if (!option.label) {
+        label = value[0].toUpperCase() + value.slice(1);
+      }
       return (
-        <option key={index} value={option}>
-          {option[0].toUpperCase() + option.slice(1)}
+        <option key={index} value={value} className="option">
+          {label}
         </option>
       );
     });
@@ -13,7 +17,7 @@ class SelectDropdown extends React.Component {
     return (
       <div>
         <label>{label}</label>
-        <select name={name} value={value} onChange={onChange}>
+        <select value={value} name={name} onChange={onChange} className="ui selection dropdown">
           {options}
         </select>
       </div>

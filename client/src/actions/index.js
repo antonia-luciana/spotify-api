@@ -1,5 +1,6 @@
 import history from "../history";
 import {
+  ADD_TRACK_TO_PLAYLIST,
   GET_USER_ID,
   CREATE_PLAYLIST,
   GET_USER_ID_ERROR,
@@ -239,6 +240,28 @@ export const search  = async (dispatch, searchTerm) => {
 
     if (response.status === 200) {
       dispatch({ type: SEARCH, payload: response.data });
+    } 
+    history.push("/");
+  } catch (error) {
+    
+  }
+};
+
+export const addTrackToPlaylist = async (dispatch, values) => {
+  try {
+    console.log("valori", values)
+    const access_token = store.getState().playlists.access_token;
+    let config = {
+      method: "POST",
+      url:  `https://api.spotify.com/v1/playlists/${values}/tracks`,
+      headers: {
+        Authorization: "Bearer " + access_token
+      }
+    };
+
+    const response = await axios(config);
+    if (response.status === 200) {
+      dispatch({ type: ADD_TRACK_TO_PLAYLIST, payload: response.data });
     } 
     history.push("/");
   } catch (error) {
