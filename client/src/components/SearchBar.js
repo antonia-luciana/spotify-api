@@ -1,11 +1,11 @@
 import React from "react";
 import Track from "../components/Track";
 import SelectDropdown from "../components/SelectDropdown";
+import AddTrackToPlaylist from "../containers/AddTrackToPlaylist";
 
 class SearchBar extends React.Component {
   state = {
-    term: "",
-    option: 
+    term: ""
   };
 
   onChange = event => {
@@ -22,7 +22,7 @@ class SearchBar extends React.Component {
   onSubmit = event => {
     event.preventDefault();
     this.props.addTrackToPlaylist(this.state.term);
-  }
+  };
 
   render() {
     console.log(this.props);
@@ -42,7 +42,11 @@ class SearchBar extends React.Component {
       result = tracks.map(item => {
         return (
           <Track key={item.id} track={item}>
-            <form onSubmit={this.onSubmit}>
+            <AddTrackToPlaylist
+              playlistsOptions={playlistsOptions}
+              track_uri={item.uri}
+            />
+            {/* <form onSubmit={this.onSubmit}>
               <SelectDropdown
                 value={this.state.option}
                 name="add-track-to-playlist"
@@ -52,7 +56,7 @@ class SearchBar extends React.Component {
               />
             </form>
             <input type="hidden" value={item.uri}/>
-            <button>Submit</button>
+            <button>Submit</button> */}
           </Track>
         );
       });

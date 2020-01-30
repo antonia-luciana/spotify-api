@@ -1,6 +1,6 @@
 import React from "react";
 
-class DeletePlaylist extends React.Component {
+class DeleteTrackFromPlaylist extends React.Component {
   componentDidMount() {
     this.props.deletePlaylist(this.props.match.params.id);
   }
@@ -13,4 +13,4 @@ class DeletePlaylist extends React.Component {
   }
 }
 
-export default DeletePlaylist;
+export default DeleteTrackFromPlaylist;

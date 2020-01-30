@@ -10,7 +10,8 @@ import {
   FETCH_PLAYLIST_TRACKS,
   SET_ACCESS_TOKEN,
   EDIT_PLAYLIST,
-  DELETE_PLAYLIST,
+  DELETE_PLAYLIST,  
+  DELETE_TRACK_FROM_PLAYLIST,
   SEARCH
 } from "./types";
 import axios from "axios";
@@ -249,19 +250,46 @@ export const search  = async (dispatch, searchTerm) => {
 
 export const addTrackToPlaylist = async (dispatch, values) => {
   try {
-    console.log("valori", values)
+    console.log("valori", values.playlist_id, values.track_uri)
     const access_token = store.getState().playlists.access_token;
-    let config = {
+    var config = {
       method: "POST",
-      url:  `https://api.spotify.com/v1/playlists/${values}/tracks`,
+      url: `https://api.spotify.com/v1/playlists/${values.playlist_id}/tracks`,
+      data: JSON.stringify({
+        uris: [values.track_uri]
+      }),
       headers: {
-        Authorization: "Bearer " + access_token
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+        Accept: "application/json"
       }
     };
 
     const response = await axios(config);
     if (response.status === 200) {
       dispatch({ type: ADD_TRACK_TO_PLAYLIST, payload: response.data });
+    } 
+    history.push("/");
+  } catch (error) {
+    
+  }
+};
+
+export const deleteTrackFromPlaylist  = async (dispatch, playlist_id) => {
+  try {
+    const access_token = store.getState().playlists.access_token;
+    var config = {
+      method: "DELETE",
+      url:  `https://api.spotify.com/v1/playlists/${playlist_id}/followers`,
+      headers: {
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json"
+      }
+    };
+    const response = await axios(config);
+    
+    if (response.status === 200) {
+      dispatch({ type: DELETE_TRACK_FROM_PLAYLIST });
     } 
     history.push("/");
   } catch (error) {

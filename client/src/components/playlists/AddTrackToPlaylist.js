@@ -1,43 +1,44 @@
 import React from "react";
-import SelectDropdown from "../components/SelectDropdown";
+import SelectDropdown from "../SelectDropdown";
 
-class addTrackToPlaylist extends React.Component {
+class AddTrackToPlaylist extends React.Component {
   state = {
-    playlist_id: '',
-    track_uri: ''
+    playlist_id: this.props.playlistsOptions[0].value,
+    track_uri: this.props.track_uri
   };
 
   onChange = event => {
     this.setState({
-      term: event.target.value
+      [event.target.value]: event.target.value
     });
-  };
-
-  onFormSubmit = event => {
-    event.preventDefault();
-    this.props.search(this.state.term);
   };
 
   onSubmit = event => {
     event.preventDefault();
-    this.props.addTrackToPlaylist(this.state.term);
+    console.log(this.state, this.props)
+    this.props.addTrackToPlaylist(this.state);
   };
 
   render() {
     return (
       <form onSubmit={this.onSubmit}>
         <SelectDropdown
-          value={this.state.option}
-          name="playlist"
+          value={this.state.playlist_id}
+          name="playlist_id"
           label={"Add to"}
           onChange={this.onChange}
           options={this.props.playlistsOptions}
         />
-        <input name="track_uri" type="hidden" value={item.uri} />
-        <button>Submit</button>
+        <input
+          name="track_uri"
+          type="hidden"
+          value={this.state.item_uri}
+          onChange={this.onChange}
+        />
+        <button className="ui button">Add To</button>
       </form>
     );
   }
 }
 
-export default addTrackToPlaylist;
+export default AddTrackToPlaylist;
