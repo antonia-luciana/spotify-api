@@ -1,18 +1,35 @@
 import React from "react";
-import PlaylistForm from "../PlaylistForm";
+import PlaylistForm from "./PlaylistForm";
+import { connect } from "react-redux";
+import { getUserId, createPlaylist } from "../../actions/index";
 
 class CreatePlaylist extends React.Component {
   render() {
-    const state = {
-      name: "",
-      public: false,
-      collaborative: false,
-      description: ""
-    };
     return (
-      <PlaylistForm buttonLabel="Create Playlist" onSubmit={this.props.createPlaylist} stateValues={state}/>
+      <PlaylistForm buttonLabel="Create Playlist" onSubmit={this.props.createPlaylist}/>
    )
   }
 }
 
-export default CreatePlaylist;
+const mapStateToProps = (state, ownProps) => {
+  return { 
+    user_id: state.playlists.user_id,
+    created_playlist: state.playlists,
+    playlists: state.playlists,
+    access_token: state.playlists.access_token
+   };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUserId: () => {
+      getUserId(dispatch);
+    },
+    createPlaylist: values => {
+      createPlaylist(dispatch, values)
+    }
+  };
+};
+
+export default (connect( mapStateToProps, mapDispatchToProps)(CreatePlaylist));
+

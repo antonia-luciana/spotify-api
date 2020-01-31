@@ -1,10 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import SearchBar from "../../containers/SearchBar";
-import ShowPlaylist from "./ShowPlaylist";
-import SelectDropdown from "../SelectDropdown";
+import SearchBar from "../playlists/SearchBar";
+import { connect } from "react-redux";
+import { fetchPlaylists, setAccessToken, getUserId } from "../../actions/index";
 
-class CreatePlaylist extends React.Component {
+class ShowPlaylists extends React.Component {
+  constructor(props) {
+    super(props);
+    this.setAccessToken = this.setAccessToken.bind(this);
+    this.setUserId = this.setUserId.bind(this);
+  }
+
   componentDidMount() {
     let access_token = new URL(window.location.href).searchParams.get(
       "access_token"
@@ -36,50 +42,57 @@ class CreatePlaylist extends React.Component {
     if (!this.props.playlists) {
       return null;
     }
-
     this.setAccessToken();
     this.setUserId();
-    const playlists = this.props.playlists.items.map(playlist => {
-      const modify =
-        playlist.owner.id === window.localStorage.getItem("user_id") ? (
-          <span>
-            <Link className="ui button positive" to={`/edit/${playlist.id}`}>
-              Edit
-            </Link>
-            <Link className="ui button negative" to={`/delete/${playlist.id}`}>
-              Unfollow
-            </Link>
-          </span>
-        ) : (
-          <Link className="ui button negative" to={`/delete/${playlist.id}`}>
-            Unfollow
-          </Link>
-        );
-      return (
-        <div key={playlist.id} className="item">
-          <i className="large music middle aligned icon"></i>
-          <div className="content">
-            <div className="header">{playlist.name}</div>
-            <div className="description">
-              {playlist.description || playlist.owner.display_name}
-            </div>
-          </div>
-          <div>
-            {modify}
-            <Link className="ui button" to={`/show/${playlist.id}`}>
-              Show
-            </Link>
-          </div>
-        </div>
-      );
-    });
 
     return (
       <div>
-        <SearchBar playlists={this.props.playlists}/>
+        <SearchBar playlists={this.props.playlists} />
         <div className="ui relaxed divided list">
           <div className="ui header">My playlists</div>
-          {playlists}
+          {this.props.playlists.items.map(playlist => {
+            const modify =
+              playlist.owner.id === window.localStorage.getItem("user_id") ? (
+                <span>
+                  <Link
+                    className="ui button positive"
+                    to={`/edit/${playlist.id}`}
+                  >
+                    Edit
+                  </Link>
+                  <Link
+                    className="ui button negative"
+                    to={`/delete/${playlist.id}`}
+                  >
+                    Unfollow
+                  </Link>
+                </span>
+              ) : (
+                <Link
+                  className="ui button negative"
+                  to={`/delete/${playlist.id}`}
+                >
+                  Unfollow
+                </Link>
+              );
+            return (
+              <div key={playlist.id} className="item">
+                <i className="large music middle aligned icon"></i>
+                <div className="content">
+                  <div className="header">{playlist.name}</div>
+                  <div className="description">
+                    {playlist.description || playlist.owner.display_name}
+                  </div>
+                </div>
+                <div>
+                  {modify}
+                  <Link className="ui button" to={`/show/${playlist.id}`}>
+                    Show
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
           <div>
             <Link className="ui button primary" to="/create">
               Create Playlist
@@ -91,4 +104,30 @@ class CreatePlaylist extends React.Component {
   }
 }
 
-export default CreatePlaylist;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    user_id: state.playlists.user_id,
+    playlists: state.playlists.playlists,
+    access_token: state.playlists.access_token,
+    search_result: state.playlists.search_result
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchPlaylists: access_token => {
+      fetchPlaylists(dispatch, access_token);
+    },
+    setAccessToken: access_token => {
+      dispatch(setAccessToken(access_token));
+    },
+    search: searchTerm => {
+      dispatch(searchTerm(searchTerm));
+    },
+    getUserId: () => {
+      getUserId(dispatch);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShowPlaylists);

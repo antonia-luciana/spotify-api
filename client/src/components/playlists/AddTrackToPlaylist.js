@@ -1,21 +1,27 @@
 import React from "react";
-import SelectDropdown from "../SelectDropdown";
+import SelectDropdown from "../shared/SelectDropdown";
+import { connect } from "react-redux";
+import { addTrackToPlaylist } from "../../actions/index";
 
 class AddTrackToPlaylist extends React.Component {
-  state = {
-    playlist_id: this.props.playlistsOptions[0].value,
-    track_uri: this.props.track_uri
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      playlist_id: this.props.playlistsOptions[0].value,
+      track_uri: this.props.track_uri
+    };
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
   onChange = event => {
     this.setState({
-      [event.target.value]: event.target.value
+      [event.target.name]: event.target.value
     });
   };
 
   onSubmit = event => {
     event.preventDefault();
-    console.log(this.state, this.props)
     this.props.addTrackToPlaylist(this.state);
   };
 
@@ -29,16 +35,22 @@ class AddTrackToPlaylist extends React.Component {
           onChange={this.onChange}
           options={this.props.playlistsOptions}
         />
-        <input
-          name="track_uri"
-          type="hidden"
-          value={this.state.item_uri}
-          onChange={this.onChange}
-        />
         <button className="ui button">Add To</button>
       </form>
     );
   }
 }
 
-export default AddTrackToPlaylist;
+const mapStateToProps = (state, ownProps) => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addTrackToPlaylist: values => {
+      addTrackToPlaylist(dispatch, values);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddTrackToPlaylist);

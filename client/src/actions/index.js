@@ -3,10 +3,8 @@ import {
   ADD_TRACK_TO_PLAYLIST,
   GET_USER_ID,
   CREATE_PLAYLIST,
-  GET_USER_ID_ERROR,
   FETCH_PLAYLIST,
   FETCH_PLAYLISTS,
-  FETCH_PLAYLISTS_ERROR,
   FETCH_PLAYLIST_TRACKS,
   SET_ACCESS_TOKEN,
   EDIT_PLAYLIST,
@@ -41,7 +39,6 @@ export const getUserId = async dispatch => {
       dispatch({ type: GET_USER_ID, payload: null });
     }
   } catch (error) {
-    dispatch({ type: GET_USER_ID_ERROR, error: error });
   }
 };
 
@@ -63,7 +60,6 @@ export const fetchPlaylists = async dispatch => {
       dispatch({ type: FETCH_PLAYLISTS, payload: null });
     }
   } catch (error) {
-    dispatch({ type: FETCH_PLAYLISTS_ERROR, error: error });
   }
 };
 
@@ -167,10 +163,10 @@ export const editPlaylist = async (dispatch, values) => {
     } else {
       dispatch({ type: EDIT_PLAYLIST, payload: null });
     }
-    setTimeout(() => {
-      history.push("/");
+    //setTimeout(() => {
+    history.push("/");
       
-    });
+    //});
   } catch (error) {
 
   }
@@ -180,31 +176,6 @@ export const editPlaylist = async (dispatch, values) => {
 export const deletePlaylist  = async (dispatch, playlist_id) => {
   try {
     const access_token = store.getState().playlists.access_token;
-    var config = {
-      method: "DELETE",
-      url:  `https://api.spotify.com/v1/playlists/${playlist_id}/followers`,
-      headers: {
-        Authorization: "Bearer " + access_token
-      }
-    };
-    const response = await axios(config);
-    
-    if (response.status === 200) {
-      dispatch({ type: DELETE_PLAYLIST });
-    } else {
-      dispatch({ type: DELETE_PLAYLIST });
-    }
-    history.push("/");
-  } catch (error) {
-    
-  }
-};
-
-
-export const deleteTrackFromPlaylist  = async (dispatch, playlist_id) => {
-  try {
-    const access_token = store.getState().playlists.access_token;
-    
     var config = {
       method: "DELETE",
       url:  `https://api.spotify.com/v1/playlists/${playlist_id}/followers`,
@@ -250,7 +221,6 @@ export const search  = async (dispatch, searchTerm) => {
 
 export const addTrackToPlaylist = async (dispatch, values) => {
   try {
-    console.log("valori", values.playlist_id, values.track_uri)
     const access_token = store.getState().playlists.access_token;
     var config = {
       method: "POST",
@@ -275,23 +245,30 @@ export const addTrackToPlaylist = async (dispatch, values) => {
   }
 };
 
-export const deleteTrackFromPlaylist  = async (dispatch, playlist_id) => {
+export const deleteTrackFromPlaylist  = async (dispatch, playlist_id, track_uri) => {
   try {
+    console.log(playlist_id, track_uri)
     const access_token = store.getState().playlists.access_token;
     var config = {
       method: "DELETE",
-      url:  `https://api.spotify.com/v1/playlists/${playlist_id}/followers`,
+      url:  `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
       headers: {
         Authorization: "Bearer " + access_token,
         "Content-Type": "application/json"
-      }
+      },
+      data: JSON.stringify({
+        "tracks": [{
+          uri: track_uri
+        }]
+      })
     };
     const response = await axios(config);
-    
+    history.push("/")
+    history.push(`/show/${playlist_id}`);
     if (response.status === 200) {
       dispatch({ type: DELETE_TRACK_FROM_PLAYLIST });
     } 
-    history.push("/");
+    
   } catch (error) {
     
   }

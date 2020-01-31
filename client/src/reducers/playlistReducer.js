@@ -19,7 +19,6 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-  console.log("reducer", action.type);
   switch (action.type) {
     case ADD_TRACK_TO_PLAYLIST:
       return _.omit(state, action.payload);

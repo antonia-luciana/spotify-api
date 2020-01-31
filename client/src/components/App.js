@@ -1,11 +1,11 @@
 import React from "react";
 import { Router, Route } from "react-router-dom";
-import CreatePlaylist from "../containers/CreatePlaylist";
-import ShowPlaylists from "../containers/ShowPlaylists";
-import EditPlaylist from "../containers/EditPlaylist";
-import DeletePlaylist from "../containers/DeletePlaylist";
-import ShowPlaylist from "../containers/ShowPlaylist";
-import SearchBar from "../containers/SearchBar";
+import CreatePlaylist from "../components/playlists/CreatePlaylist";
+import ShowPlaylists from "../components/playlists/ShowPlaylists";
+import EditPlaylist from "../components/playlists/EditPlaylist";
+import DeletePlaylist from "../components/playlists/DeletePlaylist";
+import ShowPlaylist from "../components/playlists/ShowPlaylist";
+import SearchBar from "../components/playlists/SearchBar";
 import { withRouter, Switch } from "react-router";
 import history from "../history";
 
@@ -19,7 +19,6 @@ class App extends React.Component {
     );
   }
   render() {
-    console.log("redner props", this.props);
     return (
       <div>
         <Router history={history}>
