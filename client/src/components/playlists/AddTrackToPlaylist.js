@@ -22,7 +22,9 @@ class AddTrackToPlaylist extends React.Component {
 
   onSubmit = event => {
     event.preventDefault();
-    this.props.addTrackToPlaylist(this.state);
+    this.props.addTrackToPlaylist({
+      uris: [this.state.track_uri]
+    }, this.state.playlist_id);
   };
 
   render() {
@@ -47,8 +49,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addTrackToPlaylist: values => {
-      addTrackToPlaylist(dispatch, values);
+    addTrackToPlaylist: (values, playlist_id) => {
+      addTrackToPlaylist(dispatch, values, playlist_id);
     }
   };
 };

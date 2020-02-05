@@ -6,10 +6,11 @@ import reduxThunk from 'redux-thunk';
 
 import App from "./components/App";
 import reducers from './reducers';
+import {logger} from "./api/logger";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export const store = createStore(reducers, composeEnhancers(applyMiddleware(reduxThunk)));
+export const store = createStore(reducers, composeEnhancers(applyMiddleware(reduxThunk, logger)));
 
 ReactDOM.render(<Provider store={store}>
         <App />

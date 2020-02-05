@@ -50,7 +50,12 @@ class PlaylistForm extends React.Component {
       });
       alert("Form is invalid");
     } else {
-      this.props.onSubmit(this.state);
+      this.props.onSubmit({
+        name: this.state.name,
+        description: this.state.description,
+        public: this.state.public,
+        collaborative: this.state.collaborative
+      });
     }
   };
 

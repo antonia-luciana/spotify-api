@@ -28,7 +28,9 @@ class Track extends React.Component {
             {track.artists.map(artist => artist.name).join(", ")} .{" "}
             {track.album.name}
           </div>
-          <div>{this.props.children}</div>
+          <div>
+            {this.props.children}
+          </div>
         </div>
         <div className="right floated content_ms">
           {this.renderDuration(track.duration_ms)}

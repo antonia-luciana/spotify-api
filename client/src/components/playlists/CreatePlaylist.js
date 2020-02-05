@@ -2,6 +2,7 @@ import React from "react";
 import PlaylistForm from "./PlaylistForm";
 import { connect } from "react-redux";
 import { getUserId, createPlaylist } from "../../actions/index";
+import history from "../../history";
 
 class CreatePlaylist extends React.Component {
   render() {
@@ -13,18 +14,12 @@ class CreatePlaylist extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return { 
-    user_id: state.playlists.user_id,
-    created_playlist: state.playlists,
-    playlists: state.playlists,
-    access_token: state.playlists.access_token
+    created_playlist: state.playlists.created_playlist
    };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUserId: () => {
-      getUserId(dispatch);
-    },
     createPlaylist: values => {
       createPlaylist(dispatch, values)
     }

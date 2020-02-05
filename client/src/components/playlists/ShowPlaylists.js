@@ -2,35 +2,50 @@ import React from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "../playlists/SearchBar";
 import { connect } from "react-redux";
-import { fetchPlaylists, setAccessToken, getUserId } from "../../actions/index";
+import { fetchPlaylists, setTokenData, getUserId } from "../../actions/index";
+import Button from "../shared/Button";
+import DeletePlaylist from "../playlists/DeletePlaylist";
+import history from "../../history";
 
 class ShowPlaylists extends React.Component {
   constructor(props) {
     super(props);
-    this.setAccessToken = this.setAccessToken.bind(this);
+    this.state = {
+      modal: null
+    };
+    this.setTokenData = this.setTokenData.bind(this);
     this.setUserId = this.setUserId.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
   }
 
   componentDidMount() {
     let access_token = new URL(window.location.href).searchParams.get(
       "access_token"
     );
-
-    if (!access_token) {
-      access_token = window.localStorage.getItem("access_token");
-    } else {
-      this.props.setAccessToken(access_token);
-    }
-
+    let refresh_token = new URL(window.location.href).searchParams.get(
+      "refresh_token"
+    );
+    let expires_in = new URL(window.location.href).searchParams.get(
+      "expires_in"
+    );
+    this.props.setTokenData({
+      access_token,
+      refresh_token,
+      expires_in,
+      start_time: new Date().getTime()
+    });
     this.props.getUserId();
-    this.props.fetchPlaylists(access_token);
+    this.props.fetchPlaylists();
   }
 
-  setAccessToken = () => {
-    if (this.props.access_token) {
-      window.localStorage.setItem("access_token", this.props.access_token);
+  setTokenData() {
+    console.log("set",this.props)
+    if (this.props.token_data) {
+      console.log("set toekn data", this.props.token_data)
+      window.localStorage.setItem("token_data", this.props.token_data);
     }
-  };
+  }
 
   setUserId = () => {
     if (this.props.getUserId) {
@@ -38,16 +53,31 @@ class ShowPlaylists extends React.Component {
     }
   };
 
+  hideModal() {
+    this.setState({ modal: null });
+  }
+
+  showModal(playlist) {
+    this.setState({
+      modal: (
+        <DeletePlaylist playlist={playlist} hide={this.hideModal.bind(this)} />
+      )
+    });
+  }
+
   render() {
+    console.log(this.props);
     if (!this.props.playlists) {
+      //window.location.replace("http://localhost:8888/login")
       return null;
     }
-    this.setAccessToken();
+    this.setTokenData();
     this.setUserId();
 
     return (
       <div>
         <SearchBar playlists={this.props.playlists} />
+        {this.state.modal}
         <div className="ui relaxed divided list">
           <div className="ui header">My playlists</div>
           {this.props.playlists.items.map(playlist => {
@@ -56,24 +86,22 @@ class ShowPlaylists extends React.Component {
                 <span>
                   <Link
                     className="ui button positive"
-                    to={`/edit/${playlist.id}`}
+                    to={`/playlist/edit/${playlist.id}`}
                   >
                     Edit
                   </Link>
-                  <Link
+                  <Button
+                    label="Unfollow"
                     className="ui button negative"
-                    to={`/delete/${playlist.id}`}
-                  >
-                    Unfollow
-                  </Link>
+                    onClick={() => this.showModal(playlist)}
+                  />
                 </span>
               ) : (
-                <Link
+                <Button
+                  label="Unfollow"
                   className="ui button negative"
-                  to={`/delete/${playlist.id}`}
-                >
-                  Unfollow
-                </Link>
+                  onClick={() => this.showModal(playlist)}
+                />
               );
             return (
               <div key={playlist.id} className="item">
@@ -86,7 +114,10 @@ class ShowPlaylists extends React.Component {
                 </div>
                 <div>
                   {modify}
-                  <Link className="ui button" to={`/show/${playlist.id}`}>
+                  <Link
+                    className="ui button"
+                    to={`/playlist/show/${playlist.id}`}
+                  >
                     Show
                   </Link>
                 </div>
@@ -94,7 +125,7 @@ class ShowPlaylists extends React.Component {
             );
           })}
           <div>
-            <Link className="ui button primary" to="/create">
+            <Link className="ui button primary" to="/playlist/create">
               Create Playlist
             </Link>
           </div>
@@ -118,8 +149,8 @@ const mapDispatchToProps = dispatch => {
     fetchPlaylists: access_token => {
       fetchPlaylists(dispatch, access_token);
     },
-    setAccessToken: access_token => {
-      dispatch(setAccessToken(access_token));
+    setTokenData: token_data => {
+      dispatch(setTokenData(token_data));
     },
     search: searchTerm => {
       dispatch(searchTerm(searchTerm));

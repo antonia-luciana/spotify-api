@@ -9,44 +9,23 @@ import { fetchPlaylist, deletePlaylist } from "../../actions/index";
 class DeletePlaylist extends React.Component {
   constructor(props) {
     super(props);
-    this.renderActions = this.renderActions.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.fetchPlaylist(this.props.match.params.id);
-  }
-
-  renderActions() {
-    const { id } = this.props.match.params;
-    return (
-      <React.Fragment>
-        <Button
-          onClick={() => {
-            return this.props.deletePlaylist(id);
-          }}
-          label="Unfollow"
-          className="ui button negative"
-        />
-        <Link to="/" className="ui button">
-          Cancel
-        </Link>
-      </React.Fragment>
-    );
-  }
-
-  renderContent() {
-    if (!this.props.playlist) {
-      return "Are you sure you want to follow this playlist?";
-    }
-    return `Are you sure you want to unfollow ${this.props.playlist.name}?`;
   }
 
   render() {
+    console.log("prop", this.props);
+    if (!this.props.playlist) {
+      return null;
+    }
     return (
       <Modal
-        title="Unfollow Playlist"
-        content={this.renderContent()}
-        actions={this.renderActions()}
+        title={`Unfollow Playlist ${this.props.playlist.name}`}
+        content={`Are you sure you want to unfollow ${this.props.playlist.name}?`}
+        onClickOk={() => {
+          this.props.deletePlaylist(this.props.playlist.id);
+        }}
+        okLabel="Unfollow"
+        okClass="ui button negative"
+        onClickCancel={this.props.hide}
         onDismiss={() => history.push("/")}
       />
     );
@@ -54,18 +33,13 @@ class DeletePlaylist extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return {
-    playlist: state.playlists.playlist
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     deletePlaylist: playlist_id => {
       deletePlaylist(dispatch, playlist_id);
-    },
-    fetchPlaylist: playlist_id => {
-      fetchPlaylist(dispatch, playlist_id);
     }
   };
 };

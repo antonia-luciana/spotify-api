@@ -6,7 +6,7 @@ import {
   GET_USER_ID,
   FETCH_PLAYLIST,
   FETCH_PLAYLISTS,
-  SET_ACCESS_TOKEN,
+  SET_TOKEN_DATA,
   EDIT_PLAYLIST,
   FETCH_PLAYLIST_TRACKS,
   DELETE_TRACK_FROM_PLAYLIST,
@@ -14,18 +14,19 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  access_token: localStorage.getItem("access_token"),
+  token_data: localStorage.getItem("token_data"),
   user_id: localStorage.getItem("user_id")
 };
 
 export default (state = initialState, action) => {
+  //console.log(action.type, action.payload)
   switch (action.type) {
     case ADD_TRACK_TO_PLAYLIST:
       return _.omit(state, action.payload);
     case GET_USER_ID:
       return { ...state, user_id: action.payload };
-    case SET_ACCESS_TOKEN:
-      return { ...state, access_token: action.payload };
+    case SET_TOKEN_DATA:
+      return { ...state, token_data: action.payload };
     case FETCH_PLAYLIST:
       return { ...state, playlist: action.payload };
     case FETCH_PLAYLIST_TRACKS:
